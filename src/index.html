@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
     <title>Flash Cards App</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body>
+    <div id="app">
+      <h1 v-text="deckName"></h1>
+      <div v-on:click="flipped = !flipped" class="card">
+        <h2 v-text="flipped ? ''  : cards[index].front"></h2>
+        <div v-html="flipped ? cards[index].back : ''"></div>
+      </div>
+      <div class="navigation">
+        <button @click="move(-1)" type="button">&#8592;</button>
+        <button @click="move(1)" type="button">&#8594;</button>
+      </div>
+      <a v-bind:href="readMoreUrl" target="_blank">read more</a>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="https://unpkg.com/vue@3.0.7/dist/vue.global.js"></script>
+    <script>
+      const flashCardApp = {
+        data() {
+          return {
+            deckName: "Vue.JS Fundamentals",
+            cards,
+            index: 0,
+            flipped: false,
+            readMoreUrl: "https://v3.vuejs.org/guide",
+          };
+        },
+        methods: {
+          move(direction) {
+            this.index = (this.index + direction + this.cards.length) % this.cards.length;
+            console.log(this.index)
+            this.flipped = false;
+          },
+        },
+      };
+      Vue.createApp(flashCardApp).mount("#app");
+    </script>
+  </body>
 </html>
