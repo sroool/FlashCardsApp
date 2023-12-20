@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Card Manager</title>
+  </head>
+  <body>
+    <div id="app" v-cloak>
+      <h1>Card Manager</h1>
+      <div :style="textSizeControlStyle">
+        Text size: <span v-on:click="fontSize++">bigger</span> | <span v-on:click="fontSize--">smaller</span>
+      </div>
+      <div :style="{'font-size': fontSize + 'px'}">
+        <div v-for="(card, index) in cards" class="card-pair">
+          <div class="card" v-if="editIndex === index">
+            <textarea v-on:keydown.enter="editIndex = -1" v-model="card.front"></textarea>
+          </div>
+          <div class="card" v-else v-text="card.front" v-on:click="editIndex = index"></div>
+          <div class="card" v-html="card.back"></div>
+        </div>
+      </div>
+    </div>
+    <script src="data.js"></script>
+    <script src="https://unpkg.com/vue@3.0.7/dist/vue.global.js"></script>
+    <script>
+      const flashCardApp = {
+        data() {
+          return {
+            cards,
+            editIndex: -1,
+            fontSize: 15,
+            textSizeControlStyle: {
+              ["text-align"]: 'center',
+              cursor: 'pointer',
+            },
+          };
+        },
+      };
+      Vue.createApp(flashCardApp).mount("#app");
+    </script>
+  </body>
+</html>
