@@ -52,12 +52,6 @@ h1 {
     font-size: 20px;
 }
 
-input {
-    height: 40px;
-    border-radius: 5px;
-    font-size: 20px;
-}
-
 button {
     margin: 0 20px;
     width: 50px;
@@ -132,7 +126,6 @@ form div {
 }
 
 .options label {
-    display: block;
     width: auto;
 }
 
