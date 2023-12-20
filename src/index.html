@@ -9,22 +9,20 @@
   <body>
     <div id="app">
       <h1 v-text="deckName"></h1>
-      <div class="card" :class="{again: isRepeat}" v-on:click="flipped = !flipped">
-        <h2 v-show="!flipped" v-text="front"></h2>
-        <div v-show="flipped">
-          <div v-html="back"></div>
-
-          <div class="score">
-            <button v-on:click.stop="gotIt">GOT IT</button>
-            <button v-on:click.stop="again">AGAIN</button>
-          </div>
-        </div>
-      </div>
+      <flash-card
+        v-bind:flipped="flipped"
+        v-bind:is-repeat="isRepeat"
+        v-bind:front="front"
+        v-bind:back="back"
+        v-bind:got-it="gotIt"
+        v-bind:again="again"
+        v-on:flip="flipped=!flipped"
+      ></flash-card>
       <div class="navigation">
         <button @click="move(-1)" type="button">&#8592;</button>
         <button @click="move(1)" type="button">&#8594;</button>
       </div>
-      <a v-bind:href="readMoreUrl" target="_blank">read more</a>
+      <read-more v-bind:url="readMoreUrl"><em>Click here for more info</em></read-more>
     </div>
 
     <script src="data.js"></script>
@@ -70,7 +68,28 @@
           },
         },
       };
-      Vue.createApp(flashCardApp).mount("#app");
+      const app = Vue.createApp(flashCardApp);
+      app.component("read-more", {
+        template: '<a  target="_blank" :href="url"><slot>Read More</slot></a>',
+        name: "ReadMore",
+        props: ["url"],
+      });
+      app.component("flash-card", {
+        template:
+          '<div class="card" :class="{again: isRepeat}" v-on:click="$emit(\'flip\')"> \
+        <h2 v-show="!flipped" v-text="front"></h2> \
+        <div v-show="flipped"> \
+          <div v-html="back"></div> \
+          <div class="score"> \
+            <button v-on:click.stop="gotIt">GOT IT</button> \
+            <button v-on:click.stop="again">AGAIN</button> \
+          </div> \
+        </div> \
+      </div>',
+        name: "FlashCard",
+        props: ["flipped", "isRepeat", "front", "back", "gotIt", "again"],
+      });
+      app.mount("#app");
     </script>
   </body>
 </html>
