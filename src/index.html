@@ -10,8 +10,8 @@
     <div id="app">
       <h1 v-text="deckName"></h1>
       <div v-on:click="flipped = !flipped" class="card">
-        <h2 v-text="flipped ? ''  : cards[index].front"></h2>
-        <div v-html="flipped ? cards[index].back : ''"></div>
+        <h2 v-show="!flipped" v-text="front"></h2>
+        <div v-show="flipped" v-html="back"></div>
       </div>
       <div class="navigation">
         <button @click="move(-1)" type="button">&#8592;</button>
@@ -33,10 +33,18 @@
             readMoreUrl: "https://v3.vuejs.org/guide",
           };
         },
+        computed: {
+          front() {
+            return this.cards[this.index].front;
+          },
+          back() {
+            return this.cards[this.index].back;
+          },
+        },
         methods: {
           move(direction) {
             this.index = (this.index + direction + this.cards.length) % this.cards.length;
-            console.log(this.index)
+            console.log(this.index);
             this.flipped = false;
           },
         },
